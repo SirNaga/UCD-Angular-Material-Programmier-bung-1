@@ -1,0 +1,32 @@
+<form [formGroup]="addChildForm" (ngSubmit)="onSubmit()">
+  <h2>Ihr Kind anmelden!</h2>
+  <mat-form-field appearance="fill">
+    <mat-label>Name</mat-label>
+    <input matInput placeholder="Name" formControlName="name">
+    <mat-error *ngIf="addChildForm.get('name').hasError('required') && addChildForm.get('name').touched">
+      Name is required
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Geburtsdatum</mat-label>
+    <input matInput placeholder="Geburtsdatum" formControlName="birthDate" [matDatepicker]="picker">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+    <mat-error *ngIf="addChildForm.get('birthDate').hasError('required') && addChildForm.get('birthDate').touched">
+      Birth Date is required
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Kindergarten</mat-label>
+    <mat-select formControlName="kindergardenId">
+      <mat-option value="" disabled>Bitte auswählen</mat-option>
+      <mat-option *ngFor="let kindergarden of storeService.kindergardens" [value]="kindergarden.id">
+        {{ kindergarden.name }}, {{ kindergarden.address }}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="addChildForm.get('kindergardenId').hasError('required') && addChildForm.get('kindergardenId').touched">
+      Kindergarten is required
+    </mat-error>
+  </mat-form-field>
+  <button mat-raised-button color="primary" type="submit">Erfassen</button>
+</form>

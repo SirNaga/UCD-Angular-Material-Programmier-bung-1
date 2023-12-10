@@ -1,0 +1,46 @@
+form {
+  width: 50%;
+  margin: 0 auto;
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 50px;
+  background-color: lightgray;
+}
+
+form label {
+  display: block;
+  font-size: 1.2em;
+  padding-left: 3px;
+}
+
+input, select, mat-form-field
+{
+  font-size: 1.1em;
+  padding: 10px;
+  font-family: inherit;
+  font-weight: lighter;
+  border: 0px;
+  outline: none;
+  border-radius: 0.3em;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+mat-form-field[type=submit] {
+  cursor: pointer;
+  width: 14em;
+  padding: .3em 0;
+  border-radius: 0.7em;
+}
+
+mat-form-field[type=submit]:hover {
+  #background-color: yellow;
+  #box-shadow: 2px 2px 2px grey;
+}
+
+.success-snackbar {
+  background-color: limegreen; // Customize the background color
+  color: white; // Customize the text color
+}
