@@ -21,6 +21,11 @@ import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatIconModule} from "@angular/material/icon";
 import {MatMenuModule} from "@angular/material/menu";
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import { KindergartenDetailComponent } from './kindergarten-detail/kindergarten-detail.component';
+import { DefaultListElementComponent } from './default-list-element/default-list-element.component';
+import {MatSortModule} from "@angular/material/sort";
+import {MatTableModule} from "@angular/material/table";
 
 @NgModule({
   declarations: [
@@ -30,28 +35,33 @@ import {MatMenuModule} from "@angular/material/menu";
     DataComponent,
     HeaderComponent,
     ButtonComponent,
-    PaginationPipe
+    PaginationPipe,
+    KindergartenDetailComponent,
+    DefaultListElementComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    FormsModule,
-    ReactiveFormsModule,
-    BrowserAnimationsModule,
-    MatInputModule,
-    MatDatepickerModule,
-    MatSelectModule,
-    BrowserModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatButtonModule,
-    MatSnackBarModule,
-    MatPaginatorModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatMenuModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        HttpClientModule,
+        FormsModule,
+        ReactiveFormsModule,
+        BrowserAnimationsModule,
+        MatInputModule,
+        MatDatepickerModule,
+        MatSelectModule,
+        BrowserModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatButtonModule,
+        MatSnackBarModule,
+        MatPaginatorModule,
+        MatToolbarModule,
+        MatIconModule,
+        MatMenuModule,
+        MatSortModule,
+        MatProgressSpinnerModule,
+        MatTableModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

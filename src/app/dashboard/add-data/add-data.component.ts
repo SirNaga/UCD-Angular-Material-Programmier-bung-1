@@ -21,10 +21,12 @@ export class AddDataComponent implements OnInit{
   @Input() currentPage!: number;
 
   ngOnInit(): void {
+    const today = new Date();
     this.addChildForm = this.formbuilder.group({
       name: ['', [Validators.required]],
       kindergardenId: ['', Validators.required],
-      birthDate: [null, Validators.required]
+      birthDate: [null, Validators.required],
+      registrationDate: [today, Validators.required]
     })
   }
 

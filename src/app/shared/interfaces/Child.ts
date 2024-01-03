@@ -1,16 +1,18 @@
-import { Kindergarden } from "./Kindergarden";
+import {Kindergarden} from "./Kindergarden";
 
 export interface Child {
     id: string;
     name: string;
     birthDate: string,
-    kindergardenId: number
-  }
+    kindergardenId: number,
+    registrationDate: number
+}
 
-  export interface ChildResponse {
+export interface ChildResponse {
     id: string;
     name: string;
     birthDate: string,
     kindergarden: Kindergarden,
-    kindergardenId: number
-  }
+    kindergardenId: number,
+    registrationDate: number
+}

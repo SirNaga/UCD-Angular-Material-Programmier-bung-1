@@ -1,24 +1,35 @@
-<table>
-  <tr>
-    <th>Name</th>
-    <th>Kindergarden</th>
-    <th>Adresse</th>
-    <th>Alter</th>
-    <th>Geburtsdatum</th>
-    <th></th>
-  </tr>
-  <tr *ngFor="let child of storeService.children">
-    <td>{{child.name}}</td>
-    <td>{{child.kindergarden.name}}</td>
-    <td>{{child.kindergarden.address}}</td>
-    <td>{{getAge(child.birthDate)}}</td>
-    <td>{{child.birthDate | date:'longDate'}}</td>
-    <button (click)="cancelRegistration(child.id)">Kind abmelden</button>
-  </tr>
+<mat-form-field appearance="fill">
+    <mat-label>Kindergarten</mat-label>
+    <mat-select [(value)]="selectedKindergardenId" (selectionChange)="filterChildren($event.value)">
+        <mat-option *ngFor="let kindergarden of storeService.kindergardens" [value]="kindergarden.id">
+            {{ kindergarden.name }}
+        </mat-option>
+    </mat-select>
+</mat-form-field>
+<table matSort *ngIf="!isLoading" (matSortChange)="sortData($event)">
+    <tr>
+        <th mat-sort-header="name">Name</th>
+        <th mat-sort-header="kindergarden">Kindergarden</th>
+        <th>Adresse</th>
+        <th>Alter</th>
+        <th>Geburtsdatum</th>
+        <th mat-sort-header="registrationDate">Registration Date</th>
+        <th></th>
+    </tr>
+    <tr *ngFor="let child of storeService.children">
+        <td>{{child.name}}</td>
+        <td>{{child.kindergarden.name}}</td>
+        <td>{{child.kindergarden.address}}</td>
+        <td>{{getAge(child.birthDate)}}</td>
+        <td>{{child.birthDate | date:'longDate'}}</td>
+        <td>{{getDate(child.registrationDate) | date: 'yyyy-MM-dd'}}</td>
+        <button (click)="cancelRegistration(child.id)">Kind abmelden</button>
+    </tr>
 </table>
+<mat-spinner *ngIf="isLoading"></mat-spinner>
 
 <mat-paginator
-  [length]="storeService.childrenTotalCount"
-  [pageSize]="pageSize"
-  (page)="onPageChange($event)"
+        [length]="storeService.childrenTotalCount"
+        [pageSize]="pageSize"
+        (page)="onPageChange($event)"
 ></mat-paginator>

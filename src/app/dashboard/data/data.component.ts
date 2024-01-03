@@ -1,55 +1,107 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import { BackendService } from 'src/app/shared/backend.service';
-import { CHILDREN_PER_PAGE } from 'src/app/shared/constants';
-import { StoreService } from 'src/app/shared/store.service';
+import {BackendService} from 'src/app/shared/backend.service';
+import {CHILDREN_PER_PAGE} from 'src/app/shared/constants';
+import {StoreService} from 'src/app/shared/store.service';
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
+import {MatSort, Sort} from '@angular/material/sort';
 
 @Component({
-  selector: 'app-data',
-  templateUrl: './data.component.html',
-  styleUrls: ['./data.component.scss']
+    selector: 'app-data',
+    templateUrl: './data.component.html',
+    styleUrls: ['./data.component.scss']
 })
 export class DataComponent implements OnInit {
 
-  constructor(public storeService: StoreService, private backendService: BackendService) {}
-  @Input() currentPage!: number;
-  @Output() selectPageEvent = new EventEmitter<number>();
-  public page: number = 0;
-  pageSize: number = CHILDREN_PER_PAGE;
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-
-  ngOnInit(): void {
-    this.backendService.getChildren(this.currentPage);
-  }
-
-  getAge(birthDate: string) {
-    var today = new Date();
-    var birthDateTimestamp = new Date(birthDate);
-    var age = today.getFullYear() - birthDateTimestamp.getFullYear();
-    var m = today.getMonth() - birthDateTimestamp.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < birthDateTimestamp.getDate())) {
-        age--;
+    constructor(public storeService: StoreService, private backendService: BackendService) {
     }
-    return age;
-  }
 
-  selectPage(i: any) {
-    let currentPage = i;
-    this.selectPageEvent.emit(currentPage)
-    this.backendService.getChildren(currentPage);
-  }
+    @Input() currentPage!: number;
+    @Output() selectPageEvent = new EventEmitter<number>();
+    @ViewChild(MatPaginator) paginator!: MatPaginator;
+    public page: number = 0;
+    pageSize: number = CHILDREN_PER_PAGE;
+    isLoading = true;
+    selectedKindergardenId: string | null = null;
 
-  public returnAllPages() {
-    return Math.ceil(this.storeService.childrenTotalCount / CHILDREN_PER_PAGE)
-  }
+    ngOnInit(): void {
+        this.backendService.getChildren(this.currentPage);
+        this.backendService.isLoading.subscribe(isLoading => {
+            this.isLoading = isLoading;
+        });
+    }
 
-  public cancelRegistration(childId: string) {
-    this.backendService.deleteChildData(childId, this.currentPage);
-  }
-  onPageChange(event: PageEvent): void {
-    this.currentPage = event.pageIndex + 1;
-    this.selectPage(this.currentPage);
-  }
+
+    getAge(birthDate: string) {
+        var today = new Date();
+        var birthDateTimestamp = new Date(birthDate);
+        var age = today.getFullYear() - birthDateTimestamp.getFullYear();
+        var m = today.getMonth() - birthDateTimestamp.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDateTimestamp.getDate())) {
+            age--;
+        }
+        return age;
+    }
+
+    getDate(dateString: number) {
+        return new Date(dateString);
+    }
+
+    selectPage(i: any) {
+        let currentPage = i;
+        this.selectPageEvent.emit(currentPage)
+        this.backendService.getChildren(currentPage);
+    }
+
+    public returnAllPages() {
+        return Math.ceil(this.storeService.childrenTotalCount / CHILDREN_PER_PAGE)
+    }
+
+    public cancelRegistration(childId: string) {
+        this.backendService.deleteChildData(childId, this.currentPage);
+    }
+
+    onPageChange(event: PageEvent): void {
+        this.currentPage = event.pageIndex + 1;
+        this.selectPage(this.currentPage);
+        this.isLoading = true;
+    }
+
+    filterChildren(kindergardenId: string) {
+        this.selectedKindergardenId = kindergardenId;
+        this.backendService.getChildrenForKindergarde(this.currentPage, kindergardenId); // Modify getChildren to accept kindergardenId
+    }
+
+    sortData(sort: Sort) {
+        const data = this.storeService.children;
+        if (!sort.active || sort.direction === '') {
+            this.storeService.children = data;
+            return;
+        }
+
+        this.storeService.children = data.sort((a, b) => {
+            const isAsc = sort.direction === 'asc';
+            switch (sort.active) {
+                case 'name':
+                    console.log("a " + a + " b " + b);
+                    return compare(a.name, b.name, isAsc);
+                case 'kindergarden':
+                    console.log("a " + a + " b " + b);
+                    return compare(a.kindergarden.name, b.kindergarden.name, isAsc);
+                case 'registrationDate':
+                    console.log("a " + a + " b " + b);
+                    return compare(a.registrationDate, b.registrationDate, isAsc);
+                default:
+                    return 0;
+            }
+        });
+    }
 }
+
+function compare(a: number | string, b: number | string, isAsc: boolean) {
+    console.log("a " + a + " b " + b);
+    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+}
+
+
 
 

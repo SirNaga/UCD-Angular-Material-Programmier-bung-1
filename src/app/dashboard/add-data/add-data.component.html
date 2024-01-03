@@ -19,7 +19,7 @@
   <mat-form-field appearance="fill">
     <mat-label>Kindergarten</mat-label>
     <mat-select formControlName="kindergardenId">
-      <mat-option value="" disabled>Bitte auswählen</mat-option>
+      <mat-option disabled>Bitte auswählen</mat-option>
       <mat-option *ngFor="let kindergarden of storeService.kindergardens" [value]="kindergarden.id">
         {{ kindergarden.name }}, {{ kindergarden.address }}
       </mat-option>
