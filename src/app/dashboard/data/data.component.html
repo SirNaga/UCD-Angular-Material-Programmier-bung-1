@@ -1,19 +1,20 @@
 <mat-form-field appearance="fill">
     <mat-label>Kindergarten</mat-label>
-    <mat-select [(value)]="selectedKindergardenId" (selectionChange)="filterChildren($event.value)">
+    <mat-select class="dropdown" [(value)]="selectedKindergardenId" (selectionChange)="filterChildren($event.value)">
+        <mat-option value="">Alle</mat-option>
         <mat-option *ngFor="let kindergarden of storeService.kindergardens" [value]="kindergarden.id">
             {{ kindergarden.name }}
         </mat-option>
     </mat-select>
 </mat-form-field>
 <table matSort *ngIf="!isLoading" (matSortChange)="sortData($event)">
-    <tr>
+    <tr class="header">
         <th mat-sort-header="name">Name</th>
-        <th mat-sort-header="kindergarden">Kindergarden</th>
+        <th mat-sort-header="kindergarden">Kindergarten</th>
         <th>Adresse</th>
         <th>Alter</th>
         <th>Geburtsdatum</th>
-        <th mat-sort-header="registrationDate">Registration Date</th>
+        <th mat-sort-header="registrationDate">Registrierungsdatum</th>
         <th></th>
     </tr>
     <tr *ngFor="let child of storeService.children">
@@ -23,7 +24,7 @@
         <td>{{getAge(child.birthDate)}}</td>
         <td>{{child.birthDate | date:'longDate'}}</td>
         <td>{{getDate(child.registrationDate) | date: 'yyyy-MM-dd'}}</td>
-        <button (click)="cancelRegistration(child.id)">Kind abmelden</button>
+        <button mat-raised-button color="primary" (click)="cancelRegistration(child.id)">Kind abmelden</button>
     </tr>
 </table>
 <mat-spinner *ngIf="isLoading"></mat-spinner>
@@ -31,5 +32,6 @@
 <mat-paginator
         [length]="storeService.childrenTotalCount"
         [pageSize]="pageSize"
+        [pageSizeOptions]="pageSizeOptions"
         (page)="onPageChange($event)"
 ></mat-paginator>

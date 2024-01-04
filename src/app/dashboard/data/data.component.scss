@@ -1,3 +1,32 @@
 button.active {
-    background-color: orange;
+  background-color: orange;
+}
+
+table {
+  width: 100%;
+  display: table;
+}
+
+tr {
+  display: table-row;
+}
+
+th, td {
+  display: table-cell;
+  text-align: left;
+}
+
+th:last-child, td:last-child {
+  white-space: nowrap;
+  width: 1%;
+}
+
+.header {
+  background-color: darkviolet;
+  color: white;
+}
+
+mat-form-field {
+  width: 100%;
+  height: 75px;
 }

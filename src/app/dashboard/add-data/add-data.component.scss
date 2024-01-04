@@ -15,8 +15,7 @@ form label {
   padding-left: 3px;
 }
 
-input, select, mat-form-field
-{
+input, select, mat-form-field {
   font-size: 1.1em;
   padding: 10px;
   font-family: inherit;
@@ -26,6 +25,7 @@ input, select, mat-form-field
   border-radius: 0.3em;
   margin-bottom: 20px;
   width: 100%;
+  height: 90px;
 }
 
 mat-form-field[type=submit] {

@@ -17,7 +17,7 @@ import {MatSelectModule} from "@angular/material/select";
 import {MatNativeDateModule} from "@angular/material/core";
 import {MatButtonModule} from "@angular/material/button";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
-import {MatPaginatorModule} from "@angular/material/paginator";
+import {MatPaginatorIntl, MatPaginatorModule} from "@angular/material/paginator";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatIconModule} from "@angular/material/icon";
 import {MatMenuModule} from "@angular/material/menu";
@@ -26,6 +26,7 @@ import { KindergartenDetailComponent } from './kindergarten-detail/kindergarten-
 import { DefaultListElementComponent } from './default-list-element/default-list-element.component';
 import {MatSortModule} from "@angular/material/sort";
 import {MatTableModule} from "@angular/material/table";
+import {CustomMatPaginatorIntl} from "./dashboard/data/CustomMatPaginatorIntl";
 
 @NgModule({
   declarations: [
@@ -62,7 +63,10 @@ import {MatTableModule} from "@angular/material/table";
         MatProgressSpinnerModule,
         MatTableModule
     ],
-  providers: [],
+    providers: [{
+        provide: MatPaginatorIntl,
+        useClass: CustomMatPaginatorIntl
+    }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

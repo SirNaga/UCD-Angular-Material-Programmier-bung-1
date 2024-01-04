@@ -3,7 +3,8 @@ import {BackendService} from 'src/app/shared/backend.service';
 import {CHILDREN_PER_PAGE} from 'src/app/shared/constants';
 import {StoreService} from 'src/app/shared/store.service';
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
-import {MatSort, Sort} from '@angular/material/sort';
+import {Sort} from '@angular/material/sort';
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
     selector: 'app-data',
@@ -12,7 +13,7 @@ import {MatSort, Sort} from '@angular/material/sort';
 })
 export class DataComponent implements OnInit {
 
-    constructor(public storeService: StoreService, private backendService: BackendService) {
+    constructor(public storeService: StoreService, private backendService: BackendService, private snackBar: MatSnackBar) {
     }
 
     @Input() currentPage!: number;
@@ -22,9 +23,11 @@ export class DataComponent implements OnInit {
     pageSize: number = CHILDREN_PER_PAGE;
     isLoading = true;
     selectedKindergardenId: string | null = null;
+    pageSizeOptions: number[] = [2, 5, 10, 20, 50];
 
     ngOnInit(): void {
-        this.backendService.getChildren(this.currentPage);
+        this.filterChildren("");
+        this.backendService.getChildren(this.currentPage, this.pageSize);
         this.backendService.isLoading.subscribe(isLoading => {
             this.isLoading = isLoading;
         });
@@ -46,29 +49,36 @@ export class DataComponent implements OnInit {
         return new Date(dateString);
     }
 
-    selectPage(i: any) {
-        let currentPage = i;
-        this.selectPageEvent.emit(currentPage)
-        this.backendService.getChildren(currentPage);
-    }
-
-    public returnAllPages() {
-        return Math.ceil(this.storeService.childrenTotalCount / CHILDREN_PER_PAGE)
-    }
 
     public cancelRegistration(childId: string) {
+        this.backendService.setPageSize(this.pageSize);
         this.backendService.deleteChildData(childId, this.currentPage);
+        this.showDeleteNotification("Kind erfolgreich abgemeldet");
+    }
+
+    private showDeleteNotification(message: string): void {
+        this.snackBar.open(message, 'Close', {
+            duration: 3000,
+            verticalPosition: 'top',
+            horizontalPosition: 'center',
+            panelClass: ['success-snackbar'],
+        });
     }
 
     onPageChange(event: PageEvent): void {
         this.currentPage = event.pageIndex + 1;
-        this.selectPage(this.currentPage);
+        this.pageSize = event.pageSize;
+        this.backendService.getChildren(this.currentPage, this.pageSize);
         this.isLoading = true;
     }
 
     filterChildren(kindergardenId: string) {
-        this.selectedKindergardenId = kindergardenId;
-        this.backendService.getChildrenForKindergarde(this.currentPage, kindergardenId); // Modify getChildren to accept kindergardenId
+        if (kindergardenId === '') {
+            this.backendService.getChildren(this.currentPage, this.pageSize);
+        } else {
+            this.selectedKindergardenId = kindergardenId;
+            this.backendService.getChildrenForKindergarde(this.currentPage, kindergardenId);
+        }
     }
 
     sortData(sort: Sort) {
